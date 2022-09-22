@@ -1,6 +1,7 @@
 const express = require("express"); //import express module
 const path = require("path");
 const fs = require("fs");
+const { v4: uuidv4 } = require("uuid");
 
 app = express(); // instantiate app
 
@@ -44,17 +45,17 @@ app.post("/api/notes", (req, res) => {
   // if data exists
   if (!db) {
     db = "[]"; //create new JSON array
-    console.log(typeof db);
   }
 
   // parse existing data
   let notes = JSON.parse(db); // notes object
-  console.log(typeof notes);
-  console.log(notes);
+
+  // new note from request body, add unique id
+  let note = req.body;
+  note.id = uuidv4();
 
   // add new entry
-  notes.push(req.body);
-  console.log(notes);
+  notes.push(note);
 
   // write JSON to file
   fs.writeFileSync(
