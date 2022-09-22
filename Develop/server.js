@@ -5,6 +5,8 @@ const { v4: uuidv4 } = require("uuid");
 
 app = express(); // instantiate app
 
+const PORT = process.env.PORT || 3001; //specify port
+
 // add middleware
 app.use(express.static("public")); // add path to static files
 app.use(express.json());
@@ -95,5 +97,4 @@ app.delete("/api/notes/:id", (req, res) => {
   res.sendStatus(200);
 });
 
-const PORT = 3001;
 app.listen(PORT, () => console.log("Listening..."));
