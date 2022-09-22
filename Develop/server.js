@@ -67,5 +67,33 @@ app.post("/api/notes", (req, res) => {
   res.sendStatus(200);
 });
 
+// delete entry with id provided as path param
+app.delete("/api/notes/:id", (req, res) => {
+  // read JSON file
+  const db = fs.readFileSync(
+    path.join(__dirname, "/db/db.json"),
+    "utf8",
+    (err, data) => {}
+  );
+
+  let notes = JSON.parse(db); // notes object
+
+  // iterate through notes, and remove object where id matches path param
+  for (let i = 0; i < notes.length; i++) {
+    if (notes[i].id === req.params.id) {
+      notes.splice(i, 1); // remove obj from list
+    }
+  }
+
+  // write JSON to file
+  fs.writeFileSync(
+    path.join(__dirname, "/db/db.json"),
+    JSON.stringify(notes),
+    (err, data) => {}
+  );
+
+  res.sendStatus(200);
+});
+
 const PORT = 3001;
 app.listen(PORT, () => console.log("Listening..."));
