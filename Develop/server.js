@@ -24,7 +24,9 @@ app.get("/api/notes", (req, res) => {
   );
 
   // parse and send
-  res.json(JSON.parse(db));
+  if (db) {
+    res.json(JSON.parse(db));
+  }
 });
 
 // recieve a note to save on the request body, add to db.json, return new note to client
@@ -33,15 +35,24 @@ app.get("/api/notes", (req, res) => {
 
 app.post("/api/notes", (req, res) => {
   // read JSON file
-  const db = fs.readFileSync(
+  let db = fs.readFileSync(
     path.join(__dirname, "/db/db.json"),
     "utf8",
     (err, data) => {}
   );
+  console.log("DATABASE BLANK", db);
+  // if data exists
+  if (!db) {
+    db = "[]"; //create new JSON array
+    console.log(typeof db);
+  }
 
-  const notes = JSON.parse(db); // notes object
+  // parse existing data
+  let notes = JSON.parse(db); // notes object
+  console.log(typeof notes);
   console.log(notes);
 
+  // add new entry
   notes.push(req.body);
   console.log(notes);
 
